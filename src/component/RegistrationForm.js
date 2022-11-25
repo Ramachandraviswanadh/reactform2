@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Button, Row, Col, Form, InputGroup, Alert } from "react-bootstrap"
 import './index.css'
 
@@ -12,7 +12,6 @@ const RegistrationForm = () => {
 		zipCode: '',
 		tNCAgreed: false
 	})
-
 	const [error, setError] = useState({
 		firstName: false,
 		lastName: false,
@@ -22,11 +21,27 @@ const RegistrationForm = () => {
 		zipCode: false,
 		tNCAgreed: false
 	})
+	const [submit, setSubmit] = useState(false)
+	const [success, setSuccess] = useState(false)
 
-	// const [success, setSuccess] = useState(false)
+	useEffect(() => {
+		if(submit && !Object.values(error).includes(true)){
+			setSuccess(true)
+			setUserDetails({
+				firstName: '',
+				lastName: '',
+				email: '',
+				city: '',
+				state: '',
+				zipCode: '',
+				tNCAgreed: false
+			})
+		}
+	}, [submit, error])
 	
   const handleSubmit = (e) => {
 		e.preventDefault();
+		setSubmit(true)
 
 		const { firstName, lastName, email, city, state, zipCode, tNCAgreed } = userDetails
 
@@ -123,8 +138,8 @@ const RegistrationForm = () => {
 
   return (
     <>
-      <h1 className="display-4">Registration Form</h1>
-      {true && (
+      <h1 className="display-4 mt-4 mb-4">Event Registration Form</h1>
+      {success && (
         <Alert variant="success">Your details were saved successfully!</Alert>
       )}
       <Form onSubmit={handleSubmit} className="registration-form">
@@ -142,13 +157,13 @@ const RegistrationForm = () => {
                 })
               }
             />
-            {error.firstName ? (
+            {submit && !success && (error.firstName ? (
               <Form.Control.Feedback type="invalid">
                 Please enter a valid first name
               </Form.Control.Feedback>
             ) : (
               <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
-            )}
+            ))}
           </Form.Group>
           <Form.Group as={Col} md="4" controlId="validationCustom02">
             <Form.Label>Last name</Form.Label>
@@ -163,13 +178,13 @@ const RegistrationForm = () => {
                 })
               }
             />
-            {error.lastName ? (
+            {submit && !success && (error.lastName ? (
               <Form.Control.Feedback type="invalid">
                 Please enter a valid last name
               </Form.Control.Feedback>
             ) : (
               <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
-            )}
+            ))}
           </Form.Group>
           <Form.Group as={Col} md="4" controlId="validationCustomUsername">
             <Form.Label>Email</Form.Label>
@@ -187,13 +202,13 @@ const RegistrationForm = () => {
                   })
                 }
               />
-              {error.email ? (
+              {submit && !success && (error.email ? (
                 <Form.Control.Feedback type="invalid">
                   Please enter a valid email.
                 </Form.Control.Feedback>
               ) : (
                 <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
-              )}
+              ))}
             </InputGroup>
           </Form.Group>
         </Row>
@@ -211,13 +226,13 @@ const RegistrationForm = () => {
                 })
               }
             />
-            {error.city ? (
+            {submit && !success && (error.city ? (
               <Form.Control.Feedback type="invalid">
                 Please enter a valid city.
               </Form.Control.Feedback>
             ) : (
               <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
-            )}
+            ))}
           </Form.Group>
           <Form.Group as={Col} md="3" controlId="validationCustom04">
             <Form.Label>State</Form.Label>
@@ -232,13 +247,13 @@ const RegistrationForm = () => {
                 })
               }
             />
-            {error.state ? (
+            {submit && !success && (error.state ? (
               <Form.Control.Feedback type="invalid">
                 Please enter a valid state.
               </Form.Control.Feedback>
             ) : (
               <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
-            )}
+            ))}
           </Form.Group>
           <Form.Group as={Col} md="3" controlId="validationCustom05">
             <Form.Label>Zip</Form.Label>
@@ -253,13 +268,13 @@ const RegistrationForm = () => {
                 })
               }
             />
-            {error.zipCode ? (
+            {submit && !success && (error.zipCode ? (
               <Form.Control.Feedback type="invalid">
                 Please enter a valid zip code.
               </Form.Control.Feedback>
             ) : (
               <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
-            )}
+            ))}
           </Form.Group>
         </Row>
         <Form.Group className="mb-3" style={{ textAlign: "left" }}>
@@ -273,13 +288,13 @@ const RegistrationForm = () => {
               })
             }
           />
-          {error.tNCAgreed && (
+          {submit && !success && (error.tNCAgreed && (
             <Form.Control.Feedback type="invalid">
               You need to agree to terms and conditions
             </Form.Control.Feedback>
-          )}
+          ))}
         </Form.Group>
-        <Button type="submit">Submit form</Button>
+        <Button variant="dark" type="submit">Submit form</Button>
       </Form>
     </>
   );
